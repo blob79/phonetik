@@ -680,12 +680,11 @@ public class Phonet {
                             i = (i + k) - 1;
                             z = 0;
 
-                            while ((s != null) && (s.length() > 1) &&
-                                    (j < (inputLength - 1))) {
+                            while ((s != null) && (s.length() > 1) ) {
                                 if ((j == 0) ||
                                         (dest.charAt(j - 1) != s.charAt(0))) {
                                     dest = dest.substring(0, j) + s.charAt(0) +
-                                        dest.substring(j + 1);
+                                        dest.substring(Math.min(dest.length(), j + 1));
                                     j++;
                                 }
 
@@ -704,7 +703,7 @@ public class Phonet {
                                     (phonet_rules[n].substring(1).indexOf("^^") > -1)) {
                                 if (c != 0) {
                                     dest = dest.substring(0, j) + c +
-                                        dest.substring(j + 1);
+                                        dest.substring(Math.min(dest.length(), j + 1));
                                     j++;
                                 }
 
@@ -730,10 +729,10 @@ public class Phonet {
             }
 
             if (z0 == 0) {
-                if ((j < inputLength) && (c != 0) &&
+            	if ((c != 0) &&
                         ((j == 0) || (dest.charAt(j - 1) != c))) {
                     /* delete multiple letters only */
-                    dest = dest.substring(0, j) + c + dest.substring(j + 1);
+            		dest = dest.substring(0, j) + c + dest.substring(Math.min(j + 1, inputLength));
                     j++;
                 }
 
