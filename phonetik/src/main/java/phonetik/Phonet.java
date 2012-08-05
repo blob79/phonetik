@@ -188,6 +188,7 @@ public class Phonet {
 
                     int[] p_hash1 = phonet_hash_1[k - 2];
                     int[] p_hash2 = phonet_hash_2[k - 2];
+                    assert s.length() > 0;
                     s = s.substring(1);
 
                     if (s.length() == 0) {
@@ -540,7 +541,7 @@ public class Phonet {
                                 s = phonet_rules[n0];
                                 s = removeFirst(s);
 
-                                while ((s != null) &&
+                                while (s != null && s.length() > 0 &&
 									charAt(src, i + k0) == charAt(s, 0) &&
                                     !Character.isDigit(charAt(s, 0)) &&
                                     "(-<^$".indexOf(charAt(s, 0)) == -1) {
@@ -581,7 +582,8 @@ public class Phonet {
                                     s = removeFirst(s);
                                 }
 
-                                if ((s == null) /*s == '^' is not possible here */ ||
+                                if ((s == null) || s.length() == 0 
+                                		/*s == '^' is not possible here */ ||
                                         ((charAt(s, 0) == '$') &&
                                         !Character.isLetter(charAt(src, i + k0)) &&
                                         (charAt(src, i + k0) != '.'))) {
@@ -653,7 +655,7 @@ public class Phonet {
 
                         if ((p0 == 1) && (z == 0)) {
                             /* rule with '<' is applied */
-                            if ((j > 0) && (s != null) &&
+                            if (j > 0 && s != null && s.length() > 0 &&
                                     ((charAt(dest, j - 1) == c) ||
                                     (charAt(dest, j - 1) == charAt(s, 0)))) {
                                 j--;
@@ -677,6 +679,7 @@ public class Phonet {
                             }
 
                             c = src.charAt(i);
+                            assert c != 0;
                         } else {
                             i = (i + k) - 1;
                             z = 0;
