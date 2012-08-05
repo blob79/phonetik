@@ -541,9 +541,9 @@ public class Phonet {
                                 s = removeFirst(s);
 
                                 while ((s != null) &&
-                                        (charAt(src, i + k0) == charAt(s, 0)) &&
-                                        (!Character.isDigit(charAt(s, 0)) ||
-                                        ((new String("(-<^$")).indexOf(s) == -1))) {
+									charAt(src, i + k0) == charAt(s, 0) &&
+                                    !Character.isDigit(charAt(s, 0)) &&
+                                    "(-<^$".indexOf(charAt(s, 0)) == -1) {
                                     k0++;
                                     s = removeFirst(s);
                                 }
