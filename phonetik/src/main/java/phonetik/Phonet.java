@@ -383,7 +383,7 @@ public class Phonet {
                             (src.length() > (i + k)) &&
                             (src.charAt(i + k) == s.charAt(0)) &&
                             !Character.isDigit(s.charAt(0)) &&
-                            ("(-<^$".indexOf(s) == -1)) {
+                            ("(-<^$".indexOf(s.charAt(0)) == -1)) {
                         k++;
                         s = removeFirst(s);
                     }
