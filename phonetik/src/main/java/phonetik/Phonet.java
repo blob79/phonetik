@@ -663,7 +663,8 @@ public class Phonet {
                             z++;
                             k0 = 0;
 
-                            while ((s != null) && (charAt(src, i + k0) != 0)) {
+                            while (s != null && s.length() > 0
+                        		&& charAt(src, i + k0) != 0) {
                                 src = src.substring(0, i + k0) + charAt(s, 0) +
                                     src.substring(i + k0 + 1);
                                 k0++;
