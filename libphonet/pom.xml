@@ -29,14 +29,14 @@
 						<javahClassName>phonet.CPhonet</javahClassName>
 					</javahClassNames>
 					<compilerProvider>generic-classic</compilerProvider>
-					<compilerExecutable>g++</compilerExecutable>
-					<linkerExecutable>g++</linkerExecutable>
+					<compilerExecutable>gcc</compilerExecutable>
+					<linkerExecutable>gcc</linkerExecutable>
 					<sources>
 						<source>
 							<directory>src/main/native</directory>
 							<fileNames>
 								<fileName>phonet.c</fileName>
-								<fileName>CPhonet.cpp</fileName>
+								<fileName>cphonet.c</fileName>
 							</fileNames>
 						</source>
 						<source>

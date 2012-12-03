@@ -31,16 +31,16 @@ Java_phonet_CPhonet_phonet(JNIEnv *env, jobject obj, jstring prompt) {
 	char res[size];
 	char output[size];
 	
-	char *input = (char *) env->GetStringUTFChars(prompt, NULL);
+	char *input = (char *) (*env)->GetStringUTFChars(env, prompt, NULL);
 	if (input == NULL || convert_cp1252(input, output) == -1) {
 		perror("input failed");
 		return NULL;
 	}
 	
-	env->ReleaseStringUTFChars(prompt, input);
+	(*env)->ReleaseStringUTFChars(env, prompt, input);
 	
 	int r = phonet(output, res, size, PHONET_FIRST_RULES + PHONET_GERMAN);
 	if(r < 0) return NULL;
-	return env->NewStringUTF(res);
+	return (*env)->NewStringUTF(env, res);
 }
 
