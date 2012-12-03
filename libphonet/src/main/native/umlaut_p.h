@@ -53,31 +53,16 @@
 /****  (char set = iso8859-1) - DO NOT CHANGE THESE MACROS    ****/
 #define letters_a_to_z   "abcdefghijklmnopqrstuvwxyz"
 #define letters_A_to_Z   "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-#define umlaut_lower   "àáâãåäæçğèéêëìíîïñòóôõöøœšßşùúûüıÿ"
-#define umlaut_upper   "ÀÁÂÃÅÄÆÇĞÈÉÊËÌÍÎÏÑÒÓÔÕÖØŒŠßŞÙÚÛÜİŸ"
+#define umlaut_lower   "Ã Ã¡Ã¢Ã£Ã¥Ã¤Ã¦Ã§Ã°Ã¨Ã©ÃªÃ«Ã¬Ã­Ã®Ã¯Ã±Ã²Ã³Ã´ÃµÃ¶Ã¸Å“Å¡ÃŸÃ¾Ã¹ÃºÃ»Ã¼Ã½Ã¿"
+#define umlaut_upper   "Ã€ÃÃ‚ÃƒÃ…Ã„Ã†Ã‡ÃÃˆÃ‰ÃŠÃ‹ÃŒÃÃÃÃ‘Ã’Ã“Ã”Ã•Ã–Ã˜Å’Å ÃŸÃÃ™ÃšÃ›ÃœÃÅ¸"
 
 /****  macro for "lev100.h"  ****/
-#define umlaut_conv    "AAAAAÄÄCDEEEEIIIINOOOOÖÖÖSßŞUUUÜYY"
+#define umlaut_conv    "AAAAAÃ„Ã„CDEEEEIIIINOOOOÃ–Ã–Ã–SÃŸÃUUUÃœYY"
 /****  macros for "gender.c"  ****/
 #define umlaut_sort    "AAAAAAACDEEEEIIIINOOOOOOOSSTUUUUYY"
 #define umlaut_sort2   "    AEE          H    EEE SH   E  "
 
 
-
-/****  TO-DO:  If you want to convert DOS umlauts to iso chars,   ****/
-/****     use the following macros to create a translation table  ****/
-/**
- #define DOS_chars  "… ƒÆ†‘„‡ĞŠ‚ˆ‰¡Œ‹¤•¢“ä›”áè—£–ì˜·µ¶Ç’€ÑÔÒÓŞÖ×Ø¥ãàâå™çëéêší˜"
- #define iso_chars  "àáâãåæäçğèéêëìíîïñòóôõøößşùúûüıÿÀÁÂÃÅÆÄÇĞÈÉÊËÌÍÎÏÑÒÓÔÕØÖŞÙÚÛÜİŸ"
-**/
-
-
-/****  TO-DO:  If you want to convert Mac umlauts to iso chars,   ****/
-/****     use the following macros to create a translation table  ****/
-/**
- #define Mac_chars  "¤¡ˆ‡‰‹Œ¾Š‘“’”•–˜—™›¿š§œŸØËçåÌ®€‚éƒæèíêëì„ñîïÍ¯…ôòó†Ù"
- #define iso_chars  "§°àáâãåæäçèéêëìíîïñòóôõøößùúûüÿÀÁÂÃÅÆÄÇÈÉÊËÌÍÎÏÑÒÓÔÕØÖÙÚÛÜŸ"
-**/
 
 #endif     /****  _UMLAUT_AGP_H_  ****/
 
