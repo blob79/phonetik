@@ -46,6 +46,7 @@
 
 #ifndef _PHONET_H_
 #define _PHONET_H_
+#pragma GCC diagnostic ignored "-Wunused-function"
 
 #include <stdio.h>
 #include <stdlib.h>

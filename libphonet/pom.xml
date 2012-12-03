@@ -47,7 +47,7 @@
 						<linkerStartOption>-shared</linkerStartOption>
 					</linkerStartOptions>
 					<compilerStartOptions>
-						<compilerStartOption>-w -fPIC -fexec-charset=CP1252</compilerStartOption>
+						<compilerStartOption>-g -Wall -Wextra -Werror -fPIC -fexec-charset=CP1252</compilerStartOption>
 					</compilerStartOptions>
 				</configuration>
 			</plugin>

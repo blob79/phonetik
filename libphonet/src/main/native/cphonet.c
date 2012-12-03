@@ -1,3 +1,4 @@
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "phonet_CPhonet.h"
 #include "phonet.h"
 #include <string.h>
