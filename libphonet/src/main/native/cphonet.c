@@ -1,6 +1,6 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #include "phonet_CPhonet.h"
-#include "phonet.h"
+#include "ph_ext.h"
 #include <string.h>
 #include <iconv.h>
 
@@ -8,12 +8,10 @@
  * Convert input UTF to CP1252. The phonet.c works on one-byte encoded 
  * characters. All the map characters to only fit into CP1252 not ISO-8859-1. 
  */
-static int convert_cp1252(char input[], char output[]) {
+static int convert_cp1252(char input[], char output[], size_t outbytesleft) {
 	char *inbuf = &input[0];
 	size_t inbytesleft = strlen(input);
 	char *outbuf = &output[0];
-	size_t outbytesleft = sizeof(output) - 1;
-	
 	iconv_t cd = iconv_open("CP1252", "UTF-8");
 	do {
 		if (iconv(cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft) == (size_t) -1) {
@@ -31,9 +29,9 @@ Java_phonet_CPhonet_phonet(JNIEnv *env, jobject obj, jstring prompt) {
 	unsigned int size = 1<<10;
 	char res[size];
 	char output[size];
-	
 	char *input = (char *) (*env)->GetStringUTFChars(env, prompt, NULL);
-	if (input == NULL || convert_cp1252(input, output) == -1) {
+	if (input == NULL || 
+		convert_cp1252(input, output, sizeof(output) - 1) == -1) {
 		perror("input failed");
 		return NULL;
 	}
@@ -42,6 +40,7 @@ Java_phonet_CPhonet_phonet(JNIEnv *env, jobject obj, jstring prompt) {
 	
 	int r = phonet(output, res, size, PHONET_FIRST_RULES + PHONET_GERMAN);
 	if(r < 0) return NULL;
+	printf("%s %d %d", res, size, r);
 	return (*env)->NewStringUTF(env, res);
 }
 
