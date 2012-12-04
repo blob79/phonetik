@@ -61,7 +61,7 @@
 #define  TRACE_PHONET           4
 
 
-static int  internal_mode = 0; //TRACE_PHONET;  //TODO was 0
+static int  internal_mode = 0;
 static int  last_rule_set = -PHONET_SECOND_RULES;
 static int  alpha_pos[HASH_COUNT];
 static int  isletter[HASH_COUNT];

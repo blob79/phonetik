@@ -40,7 +40,6 @@ Java_phonet_CPhonet_phonet(JNIEnv *env, jobject obj, jstring prompt) {
 	
 	int r = phonet(output, res, size, PHONET_FIRST_RULES + PHONET_GERMAN);
 	if(r < 0) return NULL;
-	printf("%s %d %d", res, size, r);
 	return (*env)->NewStringUTF(env, res);
 }
 
