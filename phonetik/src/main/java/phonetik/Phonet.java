@@ -23,20 +23,21 @@
 
 package phonetik;
 
+
 /**
  * @author Jesper Zedlitz &lt;jze@informatik.uni-kiel.de&gt;
  *
  */
 public class Phonet {
-    private static final String[] phonet_rules =
+	private static final String[] phonet_rules =
         PhoneticRules.phonet_rules_german;
-    private static final int HASH_COUNT = 512;
-    private static final String umlaut_upper =
-        "ÀÁÂÃÅÄÆÇÐÈÉÊËÌÍÎÏÑÒÓÔÕÖØßÞÙÚÛÜÝŸ";
-    private static final String umlaut_lower =
-        "àáâãåäæçðèéêëìíîïñòóôõöøßþùúûüýÿ";
-    private static final String letters_a_to_z = "abcdefghijklmnopqrstuvwxyz";
-    private static final String letters_A_to_Z = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private static final int HASH_COUNT = CharEncoding.NCHARS;
+    private static final String umlaut_upper = "ÀÁÂÃÅÄÆÇÐÈÉÊËÌÍÎÏÑÒÓÔÕÖØŒŠßÞÙÚÛÜÝŸ";
+    private static final String umlaut_lower = "àáâãåäæçðèéêëìíîïñòóôõöøœšßþùúûüýÿ";
+    private static final String letters_a_to_z = 
+		"abcdefghijklmnopqrstuvwxyz";
+    private static final String letters_A_to_Z = 
+		"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     /**
      * Output debug information if set <code>true</code>.
@@ -44,11 +45,11 @@ public class Phonet {
     boolean trace = false;
     private final char[] upperchar = new char[HASH_COUNT];
     private final int[] isletter = new int[HASH_COUNT];
-    private final int[] phonet_hash = new int[512];
+    private final int[] phonet_hash = new int[HASH_COUNT];
     private final int[] alpha_pos = new int[HASH_COUNT];
     int[][] phonet_hash_1 = new int[26][28];
     int[][] phonet_hash_2 = new int[26][28];
-
+    
     /**
      *
      */
@@ -106,11 +107,6 @@ public class Phonet {
 
     private void initialize_phonet() {
         /****  generate arrays "alpha_pos", "upperchar" and "isletter"  ****/
-        for (int i = 0; i < HASH_COUNT; i++) {
-            alpha_pos[i] = 0;
-            isletter[i] = 0;
-            upperchar[i] = (char) i;
-        }
         /* German and international umlauts  */
         {
             /* k == -1 in the original C code */
@@ -119,13 +115,13 @@ public class Phonet {
 
             for (int i = 0; i < s.length(); i++) {
                 /* s2 */
-                char n = s2.charAt(i);
+                int n = CharEncoding.toDecimal(s2.charAt(i));
                 alpha_pos[n] = -1 + 2;
                 isletter[n] = 2;
                 upperchar[n] = s2.charAt(i);
 
                 /* s */
-                n = s.charAt(i);
+                n = CharEncoding.toDecimal(s.charAt(i));
                 alpha_pos[n] = -1 + 2;
                 isletter[n] = 1;
                 upperchar[n] = s2.charAt(i);
@@ -139,13 +135,13 @@ public class Phonet {
 
             for (int i = 0; i < s.length(); i++) {
                 /* s2 */
-                char n = s2.charAt(i);
+            	int n = CharEncoding.toDecimal(s2.charAt(i));
                 alpha_pos[n] = i + 2;
                 isletter[n] = 2;
                 upperchar[n] = s2.charAt(i);
 
                 /* s */
-                n = s.charAt(i);
+                n =  CharEncoding.toDecimal(s.charAt(i));
                 alpha_pos[n] = i + 2;
                 isletter[n] = 1;
                 upperchar[n] = s2.charAt(i);
@@ -174,7 +170,7 @@ public class Phonet {
 
             if ((s != null) && ((i % 3) == 0)) {
                 /* calculate first hash value */
-                int k = phonet_rules[i].charAt(0);
+                int k = CharEncoding.toDecimal(phonet_rules[i].charAt(0));
 
                 if ((phonet_hash[k] < 0) &&
                         ((phonet_rules[i + 1] != null) ||
@@ -200,7 +196,7 @@ public class Phonet {
                     }
 
                     while ((s.length() > 0) && (s.charAt(0) != ')')) {
-                        k = alpha_pos[s.charAt(0)];
+                        k = alpha_pos[CharEncoding.toDecimal(s.charAt(0))];
 
                         if (k > 0) {
                             /****  add hash value for this letter  ****/
@@ -232,26 +228,16 @@ public class Phonet {
         }
     }
 
+
     private String toUpperCase(final String s) {
         StringBuffer result = new StringBuffer();
 
         for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-
-            int pos;
-
-            if ((pos = letters_a_to_z.indexOf(c)) > -1) {
-                // a normal letter
-                result.append(letters_A_to_Z.charAt(pos));
-            } else if ((pos = umlaut_lower.indexOf(c)) > -1) {
-                // an umlaut
-                result.append(umlaut_upper.charAt(pos));
-            } else {
-                // another character
-                result.append(c);
-            }
+            int c = CharEncoding.toDecimal(s.charAt(i));
+            char d = upperchar[c] == 0 ? s.charAt(i) : upperchar[c];
+			result.append(d);
         }
-
+        assert s.length() == result.length();
         return result.toString();
     }
 
@@ -266,7 +252,7 @@ public class Phonet {
         int n0;
         int p0;
         int z0;
-        char c;
+        int c;
         char c0 = 0;
         String s;
         String dest = input;
@@ -286,7 +272,7 @@ public class Phonet {
         z = 0;
 
         while (i < src.length()) {
-            c = src.charAt(i);
+            c = CharEncoding.toDecimal(src.charAt(i));
 
             if (trace) {
                 System.out.printf("\ncheck position %d:  src = \"%s\",", j,
@@ -347,7 +333,7 @@ public class Phonet {
             if (n >= 0) {
                 /* check rules for this char */
                 while ((phonet_rules[n] == null) ||
-                        (phonet_rules[n].charAt(0) == c)) {
+                        (CharEncoding.toDecimal(phonet_rules[n].charAt(0)) == c)) {
                     if (n > end1) {
                         if (start2 > 0) {
                             n = start2;
@@ -678,7 +664,7 @@ public class Phonet {
                                     src.substring(i + k);
                             }
 
-                            c = src.charAt(i);
+                            c = CharEncoding.toDecimal(src.charAt(i));
                             assert c != 0;
                         } else {
                             i = (i + k) - 1;
@@ -700,13 +686,13 @@ public class Phonet {
                                 s = null;
                                 c = 0;
                             } else {
-                                c = s.charAt(0);
+                                c =  CharEncoding.toDecimal(s.charAt(0));
                             }
 
                             if ((phonet_rules[n] != null) &&
                                     (phonet_rules[n].substring(1).indexOf("^^") > -1)) {
                                 if (c != 0) {
-                                    dest = dest.substring(0, j) + c +
+                                    dest = dest.substring(0, j) + CharEncoding.toChar(c) +
                                         dest.substring(Math.min(dest.length(), j + 1));
                                     j++;
                                 }
@@ -736,7 +722,8 @@ public class Phonet {
             	if ((c != 0) &&
                         ((j == 0) || (dest.charAt(j - 1) != c))) {
                     /* delete multiple letters only */
-            		dest = dest.substring(0, j) + c + dest.substring(Math.min(j + 1, inputLength));
+					dest = dest.substring(0, j) + CharEncoding.toChar(c)
+							+ dest.substring(Math.min(j + 1, inputLength));
                     j++;
                 }
 
