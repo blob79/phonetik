@@ -28,10 +28,13 @@ import com.google.common.io.CharStreams;
 import com.google.common.io.Resources;
 
 //TODO test long strings
-public class CPhonetVsPhonetikTest {
+public abstract class CPhonetVsPhonetikTest {
+
+	abstract Coder createCoder();
+	abstract int rules(); 
 
 	@Test public void phonetDefinedCharacters() {
-		Phonet1 phonet1 = new Phonet1();
+		Coder jphonet = createCoder();
 		CPhonet cPhonet = new CPhonet();
 		
 		List<String> all = new ArrayList<String>();
@@ -40,43 +43,45 @@ public class CPhonetVsPhonetikTest {
 		for (int size = 1; size <= 2; size++) {
 			for (String in : 
 					kPermutationWithRepetition(all, STRING_ADD, size)) {
-				assertEquals(in, cPhonet.phonet(in), phonet1.code(in));
+				assertEquals(in, cPhonet.phonet(in, rules()), jphonet.code(in));
 			}
 		}
 	}
 	
+
 	@Test public void phonetUndefinedCharacters() {
 		Generator<Character> invalidValues =
 				ensureValues(asList('\0'),
 				excludeValues(characters(MIN_VALUE, MAX_VALUE), 
 					CharEncoding.ALL_CHARS));
-		Phonet1 phonet1 = new Phonet1();
+		Coder jphonet = createCoder();
 		for (char c : toIterable(invalidValues)) {
 			String in = Character.toString(c);
 			try {
-				phonet1.code(in);
+				jphonet.code(in);
 				fail();
 			} catch(IllegalArgumentException e) { }
 		}
 	}
 	
+	
 	@Test public void generated() {
-		Phonet1 phonet1 = new Phonet1();
+		Coder jphonet = createCoder();
 		CPhonet cPhonet = new CPhonet();
 		for (String in : toIterable(strings(), 1<<13)) {
-			assertEquals(">" + in + "<", phonet1.code(in), cPhonet.phonet(in));
+			assertEquals(">" + in + "<", jphonet.code(in), cPhonet.phonet(in, rules()));
 		}
 	}
 	
 	@Test public void phoneticTestData() throws Exception {
 		CPhonet cPhonet = new CPhonet();
-		Phonet1 phonet1 = new Phonet1();
+		Coder jphonet = createCoder();
 		for(String resource: new String[] { "/german.txt", "/surnames.txt" }) {
 			URL url = getClass().getResource(resource);
 			for (String nextLine : CharStreams.readLines(
 					Resources.newReaderSupplier(url, Charsets.UTF_8))){
-		        String c = cPhonet.phonet(nextLine);
-				String java = phonet1.code(nextLine);
+		        String c = cPhonet.phonet(nextLine, rules());
+				String java = jphonet.code(nextLine);
 				assertEquals(c, java);
 		    }
 		}

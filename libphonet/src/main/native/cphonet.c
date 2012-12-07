@@ -27,7 +27,7 @@ static int convert(char *input_enc, char input[], char *output_enc,
 
 
 JNIEXPORT jstring JNICALL 
-Java_phonet_CPhonet_phonet(JNIEnv *env, jobject obj, jstring prompt) {
+Java_phonet_CPhonet_phonet(JNIEnv *env, jobject obj, jstring prompt, jint rules) {
 	unsigned int size = 1<<10;
 	char res[size];
 	char output[size];
@@ -39,15 +39,13 @@ Java_phonet_CPhonet_phonet(JNIEnv *env, jobject obj, jstring prompt) {
 	}
 	
 	(*env)->ReleaseStringUTFChars(env, prompt, input);
-	
-	int r = phonet(output, res, size, PHONET_FIRST_RULES + PHONET_GERMAN);
+	int c_rule = (rules == 1 ? PHONET_FIRST_RULES : PHONET_SECOND_RULES);
+	int r = phonet(output, res, size, c_rule + PHONET_GERMAN);
 	if(r < 0) return NULL;
 	if (convert("CP1252", res, "UTF-8", output, sizeof(output) - 1) == -1) {
 		perror("encoding failed");
 		return NULL;
 	}
-	//printf("C: %d %c %d %c \n", output[0], output[0], res[0], res[0]);
-	//fflush(stdout);
 	return (*env)->NewStringUTF(env, output);
 }
 
