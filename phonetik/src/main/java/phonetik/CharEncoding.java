@@ -11,17 +11,19 @@ import java.util.Set;
 
 /**
  * The <a href=
- * "http://en.wikipedia.org/w/index.php?title=Windows-1252&oldid=516505638#Code_page_layout"
- * >CP1252 character encoding</a>
- * used by phonet.
+ * "http://en.wikipedia.org/w/index.php?title=Windows-1252&oldid=516505638#Code_page_layout">
+ * CP1252 character encoding</a>.
  */
 class CharEncoding {
-	static final int[] UNDEFINED = { 0, 129, 141, 143, 144, 157 };
+	
+	// the byte values not defined by the encoding (plus \0)
+	private static final int[] UNDEFINED = { 0, 129, 141, 143, 144, 157 };
 	static final Set<Character> ALL_CHARS;
     static final int NCHARS = 1<<8;
-    private static final String ENCODING = "CP1252";
+    
     private static final char[] DECIMAL_2_CHAR = new char[NCHARS];
     private static final int[] CHAR_2_DECIMAL = new int[1<<14];
+    
 	static {
 		Arrays.sort(UNDEFINED);
     	
@@ -43,7 +45,7 @@ class CharEncoding {
 
 	private static String encodeBytes(byte[] bytes) {
 		try {
-			String encoded = new String(bytes, ENCODING);
+			String encoded = new String(bytes, "CP1252");
 			assert encoded.length() == NCHARS;
 			return encoded;
 		} catch (UnsupportedEncodingException e) { 
@@ -63,16 +65,30 @@ class CharEncoding {
 		return bytes;
 	}
 	
+	
 	static boolean isDefined(int i) {
 		return binarySearch(CharEncoding.UNDEFINED, i) < 0;
 	}
 
-    public static int toDecimal(char c) {
-    	if(c < CHAR_2_DECIMAL.length && CHAR_2_DECIMAL[c] != '\0')
-    		return CHAR_2_DECIMAL[c];
-		throw new IllegalArgumentException(format("Character %d undefined.", (int) c));
+	public static int toDecimalOrZero(char c) {
+    	return c < CHAR_2_DECIMAL.length ? CHAR_2_DECIMAL[c] :  0;
+	}
+    	
+	/**
+	 * Convert the character the position in the encoding (n-th byte).
+	 */
+	public static int toDecimal(char c) {
+		int d = toDecimalOrZero(c);
+		if (d == 0) {
+			String msg = format("Character %d undefined.", (int) c);
+			throw new IllegalArgumentException(msg);
+		}
+		return d;
     }
     
+	/**
+	 * Convert the position in the encoding (n-th byte) to a character.
+	 */
 	public static char toChar(int d) {
 		if (d > 0 && d < NCHARS && DECIMAL_2_CHAR[d] != 0)
 			return DECIMAL_2_CHAR[d];

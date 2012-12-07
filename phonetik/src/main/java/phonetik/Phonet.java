@@ -253,7 +253,7 @@ public class Phonet {
         int p0;
         int z0;
         int c;
-        char c0 = 0;
+        int c0 = 0;
         String s;
         String dest = input;
 
@@ -293,7 +293,7 @@ public class Phonet {
                 if ((i + 1) == src.length()) {
                     n = alpha_pos[0];
                 } else {
-                    n = alpha_pos[src.charAt(i + 1)];
+                    n = alpha_pos[CharEncoding.toDecimal(src.charAt(i + 1))];
                 }
 
                 start1 = p_hash1[n];
@@ -378,7 +378,7 @@ public class Phonet {
                     if ((s != null) && (s.charAt(0) == '(')) {
                         /* check an array of letters  */
                         if ((src.length() > (i + k)) &&
-                                Character.isLetter(src.charAt(i + k)) &&
+                                isLetter(src.charAt(i + k)) &&
                                 (s.substring(1).indexOf(src.charAt(i + k)) > -1)) {
                             k++;
 
@@ -426,13 +426,13 @@ public class Phonet {
                     if ((charAt(s, 0) == 0) ||
                             ((charAt(s, 0) == '^') &&
                             ((i == 0) ||
-                            !Character.isLetter(charAt(src, i - 1))) &&
+                            !isLetter(charAt(src, i - 1))) &&
                             ((charAt(s, 1) != '$') ||
-                            (!Character.isLetter(charAt(src, i + k0)) &&
+                            (!isLetter(charAt(src, i + k0)) &&
                             (charAt(src, i + k0) != '.')))) ||
                             ((charAt(s, 0) == '$') && (i > 0) &&
-                            Character.isLetter(charAt(src, i - 1)) &&
-                            (!Character.isLetter(charAt(src, i + k0)) &&
+                            isLetter(charAt(src, i - 1)) &&
+                            (!isLetter(charAt(src, i + k0)) &&
                             (charAt(src, i + k0) != '.')))) {
                         /* look for continuation, if:
                               k > 1 und NO '-' in first string */
@@ -445,13 +445,13 @@ public class Phonet {
 
                         if ((k > 1) && (charAt(src, i + k) != 0) &&
                                 (p0 != '-')) {
-                            c0 = charAt(src, (i + k) - 1);
+                            c0 = CharEncoding.toDecimal(charAt(src, (i + k) - 1));
                             n0 = alpha_pos[c0];
 
                             if ((n0 >= 2) && (charAt(src, i + k) != 0)) {
                                 int[] p_hash1 = phonet_hash_1[n0 - 2];
                                 int[] p_hash2 = phonet_hash_2[n0 - 2];
-                                n0 = alpha_pos[charAt(src, i + k)];
+                                n0 = alpha_pos[CharEncoding.toDecimal(charAt(src, i + k))];
                                 start3 = p_hash1[n0];
                                 start4 = p_hash1[0];
                                 end3 = p_hash2[n0];
@@ -490,7 +490,7 @@ public class Phonet {
                         if (n0 >= 0) { /* check continuation rules for "src[i+k] */
 
                             while ((phonet_rules[n0] == null) ||
-                                    (phonet_rules[n0].charAt(0) == c0)) {
+                                    (CharEncoding.toDecimal(phonet_rules[n0].charAt(0)) == c0)) {
                                 if (n0 > end3) {
                                     if (start4 > 0) {
                                         n0 = start4;
@@ -537,7 +537,7 @@ public class Phonet {
 
                                 if (charAt(s, 0) == '(') {
                                     /****  check an array of letters  ****/
-                                    if (Character.isLetter(charAt(src, i + k0)) &&
+                                    if (isLetter(charAt(src, i + k0)) &&
                                             (s.substring(1)
                                                   .indexOf(charAt(src, i + k0)) > -1)) {
                                         k0++;
@@ -571,7 +571,7 @@ public class Phonet {
                                 if ((s == null) || s.length() == 0 
                                 		/*s == '^' is not possible here */ ||
                                         ((charAt(s, 0) == '$') &&
-                                        !Character.isLetter(charAt(src, i + k0)) &&
+                                        !isLetter(charAt(src, i + k0)) &&
                                         (charAt(src, i + k0) != '.'))) {
                                     if (k0 == k) {
                                         /* this is only a partial string */
@@ -720,7 +720,7 @@ public class Phonet {
 
             if (z0 == 0) {
             	if ((c != 0) &&
-                        ((j == 0) || (dest.charAt(j - 1) != c))) {
+                        ((j == 0) || (CharEncoding.toDecimal(dest.charAt(j - 1)) != c))) {
                     /* delete multiple letters only */
 					dest = dest.substring(0, j) + CharEncoding.toChar(c)
 							+ dest.substring(Math.min(j + 1, inputLength));
@@ -736,4 +736,8 @@ public class Phonet {
 
         return (dest);
     }
+
+	private boolean isLetter(char c) {
+		return isletter[CharEncoding.toDecimalOrZero(c)] != 0;
+	}
 }
