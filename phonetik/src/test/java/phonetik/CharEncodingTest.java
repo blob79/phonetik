@@ -45,7 +45,7 @@ public class CharEncodingTest {
 	}
 	
 	@Test public void toDecimalToChar() {
-		for (char c : CharEncoding.ALL_CHARS) {
+		for (char c : CharEncoding.allChars()) {
 			assertEquals(c, CharEncoding.toChar(CharEncoding.toDecimal(c)));
 		}
 	}
@@ -78,7 +78,7 @@ public class CharEncodingTest {
 		Generator<Character> invalidValues =
 			ensureValues(asList('\0'),
 			excludeValues(characters(MIN_VALUE, MAX_VALUE), 
-				CharEncoding.ALL_CHARS));
+				CharEncoding.allChars()));
 		
 		for (Character invalid : toIterable(invalidValues)) {
 			try {

@@ -58,7 +58,7 @@ public abstract class CPhonetVsPhonetikTest {
 		CPhonet cPhonet = new CPhonet();
 		
 		List<String> all = new ArrayList<String>();
-		for(char c : CharEncoding.ALL_CHARS) all.add(Character.toString(c));
+		for(char c : CharEncoding.allChars()) all.add(Character.toString(c));
 		
 		for (int size = 1; size <= 2; size++) {
 			for (String in : 
@@ -73,7 +73,7 @@ public abstract class CPhonetVsPhonetikTest {
 		Generator<Character> invalidValues =
 				ensureValues(asList('\0'),
 				excludeValues(characters(MIN_VALUE, MAX_VALUE), 
-					CharEncoding.ALL_CHARS));
+					CharEncoding.allChars()));
 		Coder jphonet = createCoder();
 		for (char c : toIterable(invalidValues)) {
 			String in = Character.toString(c);
