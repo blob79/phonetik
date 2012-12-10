@@ -40,7 +40,7 @@
 							</fileNames>
 						</source>
 						<source>
-							<directory>/usr/lib/jvm/java-7-openjdk-i386/include</directory>
+							<directory>${java.home}/include</directory>
 						</source>
 					</sources>
 					<linkerStartOptions>
