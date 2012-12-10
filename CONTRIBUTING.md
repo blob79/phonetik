@@ -22,7 +22,7 @@ You have to install:
  - Maven 2
  - GCC 4.7
 
-To build and test run `mvn install`. 
+To build and test run `JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk-i386 mvn clean install`. 
 
 The build is tested with Ubuntu 12.10.
 
