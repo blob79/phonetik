@@ -40,7 +40,7 @@
 							</fileNames>
 						</source>
 						<source>
-							<directory>${java.home}/include</directory>
+							<directory>${env.JAVA_HOME}/include</directory>
 						</source>
 					</sources>
 					<linkerStartOptions>
