@@ -23,42 +23,45 @@ package phonetik;
 import java.util.Collections;
 import java.util.Iterator;
 
-public class Permutation<T> implements Iterable<T> {
+public class Permutation<I, T> implements Iterable<T> {
 
-	public interface Add<T> {
-		T add(T l, T r);
+	public interface Monoid<I, T> {
+		T identity();
+		T prepend(I r, T l);
 	}
 	
-	public final static Add<String> STRING_ADD = new Add<String>() {
-		@Override public String add(String l, String r) { return l + r;}
+	public final static Monoid<Character, String> STRING_ADD = 
+			new Monoid<Character, String>() {
+		@Override public String prepend(Character r, String l) { return r + l; }
+		@Override public String identity() { return ""; }
 	};
 	
 	private int size;
-	private Iterable<T> values;
+	private Iterable<I> values;
 	private Iterable<T> child;
-	protected T next;
-	private Add<T> op;
+	protected I next;
+	private Monoid<I, T> op;
 	
 	/**
 	 * Permutation of k elements from a list of values with repetition.
 	 */
-	public static <T> Iterable<T> kPermutationWithRepetition(
-			Iterable<T> values, Add<T> op, int k) {
-		return new Permutation<T>(values, op, k);
+	public static <I, T> Iterable<T> kPermutationWithRepetition(
+			Iterable<I> values, Monoid<I, T> op, int k) {
+		return new Permutation<I, T>(values, op, k);
 	}
 	
-	private Permutation(Iterable<T> values, Add<T> op, int size) {
+	private Permutation(Iterable<I> values, Monoid<I, T> op, int size) {
 		this.values = values;
 		this.op = op;
 		this.child = size > 1 ? 
-			new Permutation<T>(values, op, size - 1) : 
+			new Permutation<I, T>(values, op, size - 1) : 
 			Collections.<T> emptyList();
 		this.size = size;
 	}
 
 	@Override public Iterator<T> iterator() {
 		return new Iterator<T>() {
-			Iterator<T> head = values.iterator();
+			Iterator<I> head = values.iterator();
 			Iterator<T> childState = Collections.<T> emptyList().iterator();
 			@Override public boolean hasNext() {
 				return head.hasNext() || childState.hasNext();
@@ -69,7 +72,9 @@ public class Permutation<T> implements Iterable<T> {
 					next = head.next();
 					childState = child.iterator();
 				}
-				return size == 1 ? next : op.add(next, childState.next());
+				return size == 1 ? 
+						op.prepend(next, op.identity()) : 
+						op.prepend(next, childState.next());
 			}
 
 			@Override public void remove() { }

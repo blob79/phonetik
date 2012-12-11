@@ -30,12 +30,10 @@ import static net.java.quickcheck.generator.PrimitiveGenerators.strings;
 import static net.java.quickcheck.generator.iterable.Iterables.toIterable;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-import static phonetik.Permutation.kPermutationWithRepetition;
 import static phonetik.Permutation.STRING_ADD;
+import static phonetik.Permutation.kPermutationWithRepetition;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import net.java.quickcheck.Generator;
 
@@ -57,12 +55,9 @@ public abstract class CPhonetVsPhonetikTest {
 		Coder jphonet = createCoder();
 		CPhonet cPhonet = new CPhonet();
 		
-		List<String> all = new ArrayList<String>();
-		for(char c : CharEncoding.allChars()) all.add(Character.toString(c));
-		
 		for (int size = 1; size <= 2; size++) {
-			for (String in : 
-					kPermutationWithRepetition(all, STRING_ADD, size)) {
+			for (String in : kPermutationWithRepetition(
+					CharEncoding.allChars(), STRING_ADD, size)) {
 				assertEquals(in, cPhonet.phonet(in, rules()), jphonet.code(in));
 			}
 		}

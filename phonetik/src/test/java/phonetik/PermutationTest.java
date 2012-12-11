@@ -25,7 +25,6 @@ import static net.java.quickcheck.generator.CombinedGenerators.sets;
 import static net.java.quickcheck.generator.PrimitiveGeneratorSamples.anyString;
 import static net.java.quickcheck.generator.PrimitiveGenerators.characters;
 import static net.java.quickcheck.generator.PrimitiveGenerators.fixedValues;
-import static net.java.quickcheck.generator.PrimitiveGenerators.strings;
 import static net.java.quickcheck.generator.iterable.Iterables.toIterable;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -39,25 +38,30 @@ import org.junit.Test;
 
 import com.google.common.base.Functions;
 import com.google.common.collect.FluentIterable;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 public class PermutationTest {
 
 	@Test public void kPermutationWithRepetitionListOfSize1() {
-		List<String> vs = anyList(strings());
-		assertEquals(vs, Lists.newArrayList(kPermutationWithRepetition(vs, STRING_ADD, 1)));
+		List<Character> vs = anyList(characters());
+		List<String> actual = 
+				Lists.newArrayList(kPermutationWithRepetition(vs, STRING_ADD, 1));
+		ImmutableList<String> expected = 
+			FluentIterable.from(vs)
+				.transform(Functions.toStringFunction())
+				.toImmutableList();
+		assertEquals(expected, actual);
 	}
 
 	@Test public void kPermutationWithRepetitions() {
 		for(Set<Character> allowedChars : toIterable(sets(characters(), 1, 6))) {
 			String expected = anyString(
 					fixedValues(allowedChars.size()), fixedValues(allowedChars));
-			Iterable<String> vs = FluentIterable.from(allowedChars)
-					.transform(Functions.toStringFunction()).toImmutableList();
 			int k = expected.length();
 			Iterable<String> actual = 
-				kPermutationWithRepetition(vs, STRING_ADD, k);
+				kPermutationWithRepetition(allowedChars, STRING_ADD, k);
 			
 			assertEquals(Math.pow(allowedChars.size(), k), Iterables.size(actual), 0);
 			assertTrue(Iterables.contains(actual, expected));
