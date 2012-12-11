@@ -22,7 +22,6 @@ package phonetik;
 
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
 public class Permutation<T> implements Iterable<T> {
 
@@ -44,7 +43,7 @@ public class Permutation<T> implements Iterable<T> {
 	 * Permutation of k elements from a list of values with repetition.
 	 */
 	public static <T> Iterable<T> kPermutationWithRepetition(
-			List<T> values, Add<T> op, int k) {
+			Iterable<T> values, Add<T> op, int k) {
 		return new Permutation<T>(values, op, k);
 	}
 	
