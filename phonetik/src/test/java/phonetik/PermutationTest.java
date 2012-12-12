@@ -20,11 +20,11 @@
  */
 package phonetik;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static net.java.quickcheck.generator.CombinedGeneratorSamples.anyList;
-import static net.java.quickcheck.generator.CombinedGenerators.sets;
-import static net.java.quickcheck.generator.PrimitiveGeneratorSamples.anyString;
+import static net.java.quickcheck.generator.CombinedGeneratorSamples.anySet;
 import static net.java.quickcheck.generator.PrimitiveGenerators.characters;
-import static net.java.quickcheck.generator.PrimitiveGenerators.fixedValues;
+import static net.java.quickcheck.generator.PrimitiveGenerators.strings;
 import static net.java.quickcheck.generator.iterable.Iterables.toIterable;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -41,6 +41,7 @@ import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.primitives.Chars;
 
 public class PermutationTest {
 
@@ -56,14 +57,20 @@ public class PermutationTest {
 	}
 
 	@Test public void kPermutationWithRepetitions() {
-		for(Set<Character> allowedChars : toIterable(sets(characters(), 1, 6))) {
-			String expected = anyString(
-					fixedValues(allowedChars.size()), fixedValues(allowedChars));
+		int maxSize = 6;  
+		
+		for(String expected : toIterable(strings(1, maxSize))) {
+			Set<Character> allowed = 
+					newHashSet(Chars.asList(expected.toCharArray()));
+			Set<Character> additional = 
+					anySet(characters(), 0, maxSize - allowed.size());
+			allowed.addAll(additional);
+			
 			int k = expected.length();
 			Iterable<String> actual = 
-				kPermutationWithRepetition(allowedChars, STRING_ADD, k);
+				kPermutationWithRepetition(allowed, STRING_ADD, k);
 			
-			assertEquals(Math.pow(allowedChars.size(), k), Iterables.size(actual), 0);
+			assertEquals(Math.pow(allowed.size(), k), Iterables.size(actual), 0);
 			assertTrue(Iterables.contains(actual, expected));
 		}
 	}

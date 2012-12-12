@@ -25,13 +25,13 @@ import java.util.Iterator;
 
 public class Permutation<I, T> implements Iterable<T> {
 
-	public interface Monoid<I, T> {
+	public interface Add<I, T> {
 		T identity();
 		T prepend(I r, T l);
 	}
 	
-	public final static Monoid<Character, String> STRING_ADD = 
-			new Monoid<Character, String>() {
+	public final static Add<Character, String> STRING_ADD = 
+			new Add<Character, String>() {
 		@Override public String prepend(Character r, String l) { return r + l; }
 		@Override public String identity() { return ""; }
 	};
@@ -40,17 +40,17 @@ public class Permutation<I, T> implements Iterable<T> {
 	private Iterable<I> values;
 	private Iterable<T> child;
 	protected I next;
-	private Monoid<I, T> op;
+	private Add<I, T> op;
 	
 	/**
 	 * Permutation of k elements from a list of values with repetition.
 	 */
 	public static <I, T> Iterable<T> kPermutationWithRepetition(
-			Iterable<I> values, Monoid<I, T> op, int k) {
+			Iterable<I> values, Add<I, T> op, int k) {
 		return new Permutation<I, T>(values, op, k);
 	}
 	
-	private Permutation(Iterable<I> values, Monoid<I, T> op, int size) {
+	private Permutation(Iterable<I> values, Add<I, T> op, int size) {
 		this.values = values;
 		this.op = op;
 		this.child = size > 1 ? 
