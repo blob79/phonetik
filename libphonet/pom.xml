@@ -42,6 +42,9 @@
 						<source>
 							<directory>${env.JAVA_HOME}/include</directory>
 						</source>
+						<source>
+							<directory>${env.JAVA_HOME}/include/linux</directory>
+						</source>
 					</sources>
 					<linkerStartOptions>
 						<linkerStartOption>-shared</linkerStartOption>
