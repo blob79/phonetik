@@ -34,4 +34,17 @@
 		</plugins>
 
 	</build>
+	<distributionManagement>
+		<repository>
+			<id>development-releases</id>
+			<name>repository</name>
+			<url>${maven.repository.url}-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>development-snapshots</id>
+			<name>repository</name>
+			<url>${maven.repository.url}-snapshots/</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
