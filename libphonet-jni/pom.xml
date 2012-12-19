@@ -3,11 +3,10 @@
 	<groupId>phonetik</groupId>
 	<artifactId>libphonet-jni</artifactId>
 	<name>libphonet-jni</name>
-	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<parent>
-        <groupId>phonetik</groupId>
-        <artifactId>phonetik-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
+        	<groupId>phonetik</groupId>
+        	<artifactId>phonetik-parent</artifactId>
+			<version>1.0</version>
+   	</parent>
 </project>

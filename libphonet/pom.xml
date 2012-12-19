@@ -3,18 +3,17 @@
 	<groupId>phonetik</groupId>
 	<artifactId>libphonet</artifactId>
 	<name>libphonet</name>
-	<version>1.0-SNAPSHOT</version>
 	<packaging>so</packaging>
 	<parent>
-        <groupId>phonetik</groupId>
-        <artifactId>phonetik-parent</artifactId>
-        <version>1.0-SNAPSHOT</version>
-    </parent>
+        	<groupId>phonetik</groupId>
+	        <artifactId>phonetik-parent</artifactId>
+			<version>1.0</version>
+	</parent>
 	<dependencies>
 		<dependency>
 			<groupId>phonetik</groupId>
 			<artifactId>libphonet-jni</artifactId>
-			<version>1.0-SNAPSHOT</version>
+			<version>${project.version}</version>	
 		</dependency>
 	</dependencies>
 	<build>
